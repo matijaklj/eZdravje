@@ -162,8 +162,10 @@ function prikaziEHRodBolnika(ehrId, callback) {
 				$("#kreirajIme").html(party.firstNames);
 				$("#kreirajPriimek").html(party.lastNames);
 				$("#kreirajDatumRojstva").html(party.dateOfBirth);
-				$("#kreirajSpol").html(party.gender);
-				$("#kreirajNaslov").html(party.address.address);
+				if(party.gender) $("#kreirajSpol").html(party.gender);
+				else $("#kreirajSpol").html("-");
+				if(party.address) $("#kreirajNaslov").html(party.address.address);
+				else $("#kreirajNaslov").html("-");
 				
 				callback && callback();
 				
@@ -181,8 +183,92 @@ function prikaziEHRodBolnika(ehrId, callback) {
 	}
 }
 
+function prikaziVitalnePodatke(ehrId) {
+    sessionId = getSessionId();
+    
+    $.ajax({
+        url: baseUrl + "/view/" + ehrId + "/body_temperature",
+        type: 'GET',
+        headers: { "Ehr-Session": sessionId },
+        success: function (res) {
+            for (var i in res) {
+                var datum = new Date(res[i].time);
+                $("#temperatura").append(
+                    "<span class=\"label label-info\">" + datum.toDateString() + "</span> " +
+                     res[i].temperature  + res[i].unit + "<br>");
+                //console.log(res[i].time + ": " + res[i].temperature  + res[i].unit);
+            }
+        }
+    });
+    
+    $.ajax({
+        url: baseUrl + "/view/" + ehrId + "/blood_pressure",
+        type: 'GET',
+        headers: { "Ehr-Session": sessionId },
+        success: function (res) {
+            for (var i in res) {
+                var datum = new Date(res[i].time);
+                $("#tlak").append(
+                    "<span class=\"label label-info\">" + datum.toDateString() + "</span> <br> " +
+                    "<span class=\"label label-success\" style=\" margin-left:2em; margin-right:2em \"> systolic </span>  " +
+                     res[i].systolic + " " + res[i].unit + "<br>" +
+                    "<span class=\"label label-success\" style=\" margin-left:2em; margin-right:2em \"> diastolic </span>  " +
+                     res[i].diastolic + " " + res[i].unit + "<br>");
+                //console.log(res[i].time + ": " + res[i].temperature  + res[i].unit);
+            }
+        }
+    });
+    
+    $.ajax({
+        url: baseUrl + "/view/" + ehrId + "/height",
+        type: 'GET',
+        headers: { "Ehr-Session": sessionId },
+        success: function (res) {
+            for (var i in res) {
+                var datum = new Date(res[i].time);
+                $("#visina").append(
+                    "<span class=\"label label-info\">" + datum.toDateString() + "</span> " +
+                     res[i].height  + res[i].unit + "<br>");
+                //console.log(res[i].time + ": " + res[i].temperature  + res[i].unit);
+            }
+        }
+    });
+    
+    $.ajax({
+        url: baseUrl + "/view/" + ehrId + "/weight",
+        type: 'GET',
+        headers: { "Ehr-Session": sessionId },
+        success: function (res) {
+            for (var i in res) {
+                var datum = new Date(res[i].time);
+                $("#teza").append(
+                    "<span class=\"label label-info\">" + datum.toDateString() + "</span> " +
+                     res[i].weight  + res[i].unit + "<br>");
+                //console.log(res[i].time + ": " + res[i].temperature  + res[i].unit);
+            }
+        }
+    });
+    
+    $.ajax({
+        url: baseUrl + "/view/" + ehrId + "/spO2",
+        type: 'GET',
+        headers: { "Ehr-Session": sessionId },
+        success: function (res) {
+            for (var i in res) {
+                var datum = new Date(res[i].time);
+                $("#spO2").append(
+                    "<span class=\"label label-info\">" + datum.toDateString() + "</span> " +
+                     res[i].spO2  + "<br>");
+                //console.log(res[i].time + ": " + res[i].temperature  + res[i].unit);
+            }
+        }
+    });
+    
+}
+
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
 
+/*
 function displayAppBody() {
     if(document.getElementById("izberiBolnika").value != "") {
         var podatki = document.getElementById("izberiBolnika").value.split(";");
@@ -190,7 +276,7 @@ function displayAppBody() {
         document.querySelector("#app-body").style.display = 'block';
     } else document.querySelector("#app-body").style.display = 'none';
 }
-
+*/
 
 function izberiPacienta() {
     if(document.getElementById("izberiBolnika").value != "") {
@@ -200,6 +286,7 @@ function izberiPacienta() {
         
         prikaziEHRodBolnika(izbrani_id, function() {
             initMap();
+            prikaziVitalnePodatke(izbrani_id);
             document.querySelector("#izbiraPacienta").style.display = 'none';
             document.querySelector("#app-body").style.display = 'block';
         });
@@ -210,6 +297,7 @@ function izberiPacienta() {
         
         prikaziEHRodBolnika(izbrani_id, function() {
             initMap();
+            prikaziVitalnePodatke(izbrani_id);
             document.querySelector("#izbiraPacienta").style.display = 'none';
             document.querySelector("#app-body").style.display = 'block';
         });

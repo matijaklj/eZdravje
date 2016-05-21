@@ -10,6 +10,7 @@
   
   <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjbQ3MrKmcLppv4seRMH7q0bO08CgzJfo"></script>
   
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
   <script src="knjiznice/js/bootstrap.min.js"></script>
@@ -93,34 +94,82 @@
 				
 				<div class="col-sm-12">
 				  <ul class="nav nav-pills nav-justified">
-            <!-- onClick="toggleVitalni();"-->
-            <!-- onClick="toggleMap();"-->
             <li class="active"><a data-toggle="pill" href="#home">Vitalni podatki pacienta</a></li>
-              <li><a data-toggle="pill" href="#menu1">Zemljevid</a></li>
+            <li><a data-toggle="pill" href="#menu1">Zemljevid</a></li>
           </ul>
 				</div>
 				
-				<div id="home" class="tab-pane fade in active">
-				  <div id="vitalniPodatki" class="col-sm-6">
-				    
-				  </div>
-				</div>
-				<div id="menu1" class="tab-pane fade">
-				  <div class="col-sm-12">
-				    <form class="form-inline " role="form">
-  				    <div class="form-group col-sm-12">
-  				      <p class="col-sm-4">Izberi zravstveno ustanovo: </p>
-      				  <select class="form-control col-sm-6" id="izberiZU">
-      				    <option value="Zdravstveni dom Nova Gorica, Nova Gorica">ZD Nova Gorica</option>
-      				  </select>
-      				  <button type="button" class="btn btn-primary col-sm-3" id="directionBtn">Prikaži pot</button>
-  				    </div>
-  				  </form>
-				    <div id="map" class="col-sm-12" style="height: 500px"></div>
-				  </div>
-				  
-				</div>
-				
+				<div class="tab-content">
+  				<div id="home" class="tab-pane fade in active">
+  				  <div id="vitalniPodatki" class="col-sm-6">
+  				    <br>
+              
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <button class="btn btn-info btn-block" data-toggle="collapse" data-target="#visina" >Višina</button>
+                  <div id="visina" class="collapse">
+                  </div>
+                </div>
+              </div>
+  				    
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <button class="btn btn-info btn-block" data-toggle="collapse" data-target="#teza" >Telesna teža</button>
+                  <div id="teza" class="collapse">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <button class="btn btn-info btn-block" data-toggle="collapse" data-target="#temperatura" >Telesna temperatura</button>
+                  <div id="temperatura" class="collapse">
+                  </div>
+                </div>
+              </div>
+  				    
+  				    <div class="panel panel-default">
+                <div class="panel-heading">
+                  <button class="btn btn-info btn-block" data-toggle="collapse" data-target="#tlak" >Krvni tlak</button>
+                  <div id="tlak" class="collapse">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <button class="btn btn-info btn-block" data-toggle="collapse" data-target="#spO2" >Nasičenost krvi s kisikom</button>
+                  <div id="spO2" class="collapse">
+                  </div>
+                </div>
+              </div>
+              
+  				  </div>
+  				  
+  				  <div id="visualizacija" class="col-sm-6">
+  				    <h3>Vizualizacija podatkov</h3>
+  				  </div>
+  				  
+  				</div>
+  				
+  				<div id="menu1" class="tab-pane fade">
+  				  <div class="col-sm-12">
+  				    <form class="form-inline " role="form">
+    				    <div class="form-group col-sm-12">
+    				      <p class="col-sm-4">Izberi zravstveno ustanovo: </p>
+        				  <select class="form-control col-sm-6" id="izberiZU">
+        				    <option value="Zdravstveni dom Nova Gorica, Nova Gorica">ZD Nova Gorica</option>
+        				  </select>
+        				  <button type="button" class="btn btn-primary col-sm-3" id="directionBtn">Prikaži pot</button>
+    				    </div>
+    				  </form>
+    				  
+  				    <div id="map" class="col-sm-12" style="height: 400px"></div>
+  				    
+  				  </div>
+  				</div>
+  				
+  			</div>	
 				<!--<div id="vitalniPodatki" class="col-sm-12" style="display: block"></div>
 				<div id="map" class="col-sm-12" style="display: none; height:400px"></div> -->
 				
