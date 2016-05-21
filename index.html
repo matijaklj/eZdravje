@@ -7,6 +7,10 @@
   <style>
     body {padding-top: 70px;}
   </style>
+  
+  <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjbQ3MrKmcLppv4seRMH7q0bO08CgzJfo"></script>
+  
+  
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
   <script src="knjiznice/js/bootstrap.min.js"></script>
   <script src="knjiznice/js/koda.js"></script>
@@ -22,7 +26,7 @@
           <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
         </button>
         <!-- ZAČETEK: Ime vaše aplikacije -->
-        <a class="navbar-brand" href="index.html">{ime vaše aplikacije}</a>
+        <a class="navbar-brand" href="index.html">Zdravstveni pomočnik</a>
         <!-- KONEC: Ime vaše aplikacije -->
       </div>
       <div class="collapse navbar-collapse" id="menujska-vrstica">
@@ -39,9 +43,6 @@
   <!-- ZAČETEK: Vsebina aplikacije -->
   <div class="container">
     <div class="row">
-      <div class="col-lg-12 text-center">
-        <p class="lead"><strong>TO-DO</strong>: Na tem mestu implementirajte vašo aplikacijo.</p>
-      </div>
       
       <div class="col-lg-12 text-center" id="izbiraPacienta" style="display: block">
         <div class="col-lg-12 text-center"> 
@@ -75,7 +76,7 @@
 				<div class="col-sm-3">
 				  <img src="icon-profile.png" alt="slika profila" class="img-rounded" width="200" height="200">
 				</div>
-				<div class="col-sm-6">
+				<div class="col-sm-9">
 				  <br>
 				  <span class="label label-default">Ime</span>
   				<p class="h5" id="kreirajIme" style="padding-left:1em"></p>
@@ -85,8 +86,43 @@
   				<p class="h5" for="datumRojstva" id="kreirajDatumRojstva" style="padding-left:1em"></p>
   				<span class="label label-default">Spol</span>
   				<p class="h5" for="spol" id="kreirajSpol" style="padding-left:1em"></p>
+  				<span class="label label-default">Naslov</span>
+  				<p class="h5" for="naslov" id="kreirajNaslov" style="padding-left:1em"></p>
   				<br>
 				</div>
+				
+				<div class="col-sm-12">
+				  <ul class="nav nav-pills nav-justified">
+            <!-- onClick="toggleVitalni();"-->
+            <!-- onClick="toggleMap();"-->
+            <li class="active"><a data-toggle="pill" href="#home">Vitalni podatki pacienta</a></li>
+              <li><a data-toggle="pill" href="#menu1">Zemljevid</a></li>
+          </ul>
+				</div>
+				
+				<div id="home" class="tab-pane fade in active">
+				  <div id="vitalniPodatki" class="col-sm-6">
+				    
+				  </div>
+				</div>
+				<div id="menu1" class="tab-pane fade">
+				  <div class="col-sm-12">
+				    <form class="form-inline " role="form">
+  				    <div class="form-group col-sm-12">
+  				      <p class="col-sm-4">Izberi zravstveno ustanovo: </p>
+      				  <select class="form-control col-sm-6" id="izberiZU">
+      				    <option value="Zdravstveni dom Nova Gorica, Nova Gorica">ZD Nova Gorica</option>
+      				  </select>
+      				  <button type="button" class="btn btn-primary col-sm-3" id="directionBtn">Prikaži pot</button>
+  				    </div>
+  				  </form>
+				    <div id="map" class="col-sm-12" style="height: 500px"></div>
+				  </div>
+				  
+				</div>
+				
+				<!--<div id="vitalniPodatki" class="col-sm-12" style="display: block"></div>
+				<div id="map" class="col-sm-12" style="display: none; height:400px"></div> -->
 				
 			</div>  
       

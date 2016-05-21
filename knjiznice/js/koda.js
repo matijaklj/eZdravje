@@ -67,19 +67,19 @@ function generirajPodatke(stPacienta, callback) {
   var ehrId = "";
   
   if(stPacienta == 1) {
-      kreirajEHRzaBolnika("Janez", "Novakovic", "MALE", "1989-10-25T14:58", function(id) {
+      kreirajEHRzaBolnika("Janez", "Novakovic", "MALE", "1989-10-25T14:58", "Snežatno 2, 5211 Kojsko", function(id) {
             console.log("id je:  " + id);
             ehrId = id;
             callback && callback(id);
       });
   } else if(stPacienta == 2) {
-      kreirajEHRzaBolnika("Brenda", "Petelin", "FEMALE", "1943-12-14T16:00", function(id) {
+      kreirajEHRzaBolnika("Brenda", "Petelin", "FEMALE", "1943-12-14T16:00", "Stara Gora 18a, 5000 Nova Gorica", function(id) {
             console.log("id je:  " + id);
             ehrId = id;
             callback && callback(id);
       });
   } else if(stPacienta == 3) {
-      kreirajEHRzaBolnika("Ian", "Vehar", "MALE", "2001-06-20T18:34", function(id) {
+      kreirajEHRzaBolnika("Ian", "Vehar", "MALE", "2001-06-20T18:34", "Ulica bratov Hvalič 64, 5000 Nova Gorica", function(id) {
             console.log("id je:  " + id);
             ehrId = id;
             callback && callback(id);
@@ -91,7 +91,7 @@ function generirajPodatke(stPacienta, callback) {
   return ehrId;
 }
 
-function kreirajEHRzaBolnika(ime, priimek, spol, datumRojstva, callback) {
+function kreirajEHRzaBolnika(ime, priimek, spol, datumRojstva, naslov, callback) {
 	sessionId = getSessionId();
 
     var id = "";
@@ -117,6 +117,7 @@ function kreirajEHRzaBolnika(ime, priimek, spol, datumRojstva, callback) {
 		            lastNames: priimek,
 		            gender: spol,
 		            dateOfBirth: datumRojstva,
+		            address: { address: naslov }, //dodaj naslov pacienta
 		            partyAdditionalInfo: [{key: "ehrId", value: ehrId}]
 		        };
 		        $.ajax({
@@ -162,6 +163,8 @@ function prikaziEHRodBolnika(ehrId, callback) {
 				$("#kreirajPriimek").html(party.lastNames);
 				$("#kreirajDatumRojstva").html(party.dateOfBirth);
 				$("#kreirajSpol").html(party.gender);
+				$("#kreirajNaslov").html(party.address.address);
+				
 				callback && callback();
 				
 				/* $("#preberiSporocilo").html("<span class='obvestilo label " +
@@ -196,6 +199,7 @@ function izberiPacienta() {
         console.log("izbrani id je: " + izbrani_id);
         
         prikaziEHRodBolnika(izbrani_id, function() {
+            initMap();
             document.querySelector("#izbiraPacienta").style.display = 'none';
             document.querySelector("#app-body").style.display = 'block';
         });
@@ -205,6 +209,7 @@ function izberiPacienta() {
         console.log("izbrani id je: " + izbrani_id);
         
         prikaziEHRodBolnika(izbrani_id, function() {
+            initMap();
             document.querySelector("#izbiraPacienta").style.display = 'none';
             document.querySelector("#app-body").style.display = 'block';
         });
@@ -213,6 +218,51 @@ function izberiPacienta() {
     }
 }
 
+function initMap() {
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: {lat: 45.9550, lng: 13.6493}
+        });
+        directionsDisplay.setMap(map);
+
+        var onChangeHandler = function() {
+          calculateAndDisplayRoute(directionsService, directionsDisplay);
+        };
+        document.getElementById('izberiZU').addEventListener('change', onChangeHandler);
+        document.getElementById('directionBtn').addEventListener('click', onChangeHandler);
+        
+}
+
+function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+  //console.log(document.getElementById('izberiZU').value);
+  //console.log(document.getElementById('kreirajNaslov').innerHTML);
+  directionsService.route({
+    origin: document.getElementById('izberiZU').value,
+    destination: document.getElementById('kreirajNaslov').innerHTML,
+    travelMode: google.maps.TravelMode.DRIVING
+  }, function(response, status) {
+    if (status === google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    } else {
+      window.alert('Directions request failed due to ' + status);
+    }
+  });
+}
+
+/*
+function toggleMap() {
+    initMap();
+    document.querySelector("#vitalniPodatki").style.display = "none";
+    document.querySelector("#map").style.display = "block";
+}
+
+function toggleVitalni() {
+    document.querySelector("#vitalniPodatki").style.display = "block";
+    document.querySelector("#map").style.display = "none";
+}
+*/
 
 $(document).ready(function() {
     
