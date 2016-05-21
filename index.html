@@ -29,7 +29,7 @@
         <ul class="nav navbar-nav">
           <li><a href="opis.html">Opis ideje</a></li>
           <li><a href="nacrt.html">Načrt informacijske rešitve</a></li>
-          <li><a href="#">Generiranje podatkov</a></li>
+          <li><a href="#" onClick="generirajVzorcnePaciente();">Generiranje podatkov</a></li>
         </ul>
       </div>
     </div>
@@ -42,6 +42,54 @@
       <div class="col-lg-12 text-center">
         <p class="lead"><strong>TO-DO</strong>: Na tem mestu implementirajte vašo aplikacijo.</p>
       </div>
+      
+      <div class="col-lg-12 text-center" id="izbiraPacienta" style="display: block">
+        <div class="col-lg-12 text-center"> 
+          <br>
+          <label for="usr">Izberite pacienta:</label>
+          <div style="width: 60%; margin-left: 20%;">
+            <select class="form-control" id="izberiBolnika">
+              <option value=""></option>
+              <!-- <option value="Janez;Novak;1989-10-25T14:58">Janez Novakovic</option>
+              <option value="Brenda;Petelin;1943-12-14T16:00">Brenda Petelin</option>
+              <option value="Ian;Vehar;2001-06-20T18:34">Ian Vehar</option> -->
+            </select>
+          </div>
+        </div>
+        <div class="col-lg-12 text-center"> 
+          <br>
+          <div class="form-group">
+            <label for="usr">EHR ID:</label>
+            <input type="text" class="form-control" style="width: 60%; margin-left: 20%;" id="id_input">
+          </div>
+        </div>
+        <div class="col-lg-12 text-center">
+          <br>
+          <button type="button" class="btn btn-primary" onClick="izberiPacienta();">Izberi pacienta</button>
+          <br>
+          <span id="statusSporocilo"></span>
+        </div>
+      </div>
+        
+      <div class="row" id="app-body" style="display: none; background-color: lightgray;">
+				<div class="col-sm-3">
+				  <img src="icon-profile.png" alt="slika profila" class="img-rounded" width="200" height="200">
+				</div>
+				<div class="col-sm-6">
+				  <br>
+				  <span class="label label-default">Ime</span>
+  				<p class="h5" id="kreirajIme" style="padding-left:1em"></p>
+  				<span class="label label-default" >Priimek</span>
+  				<p class="h5" for="priimek" id="kreirajPriimek" style="padding-left:1em"></p>
+  				<span class="label label-default">Datum rojstva</span>
+  				<p class="h5" for="datumRojstva" id="kreirajDatumRojstva" style="padding-left:1em"></p>
+  				<span class="label label-default">Spol</span>
+  				<p class="h5" for="spol" id="kreirajSpol" style="padding-left:1em"></p>
+  				<br>
+				</div>
+				
+			</div>  
+      
     </div>
   </div>
   <!-- KONEC: Vsebina aplikacije -->

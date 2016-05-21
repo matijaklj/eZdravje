@@ -5,6 +5,10 @@ var queryUrl = baseUrl + '/query';
 var username = "ois.seminar";
 var password = "ois4fri";
 
+var id1 = "";
+var id2 = "";
+var id3 = "";
+
 
 /**
  * Prijava v sistem z privzetim uporabnikom za predmet OIS in pridobitev
@@ -22,6 +26,35 @@ function getSessionId() {
 }
 
 
+function generirajVzorcnePaciente() {
+    generirajPodatke(1, function(id){
+        id1 = id;
+        var newOption = document.createElement('option');
+        newOption.value = id1;
+        newOption.innerHTML = "Janez Novakovic";
+        
+        document.getElementById("izberiBolnika").appendChild(newOption);
+    });
+    generirajPodatke(2, function(id){
+        id2 = id;
+        var newOption = document.createElement('option');
+        newOption.value = id2;
+        newOption.innerHTML = "Brenda Petelin";
+        
+        document.getElementById("izberiBolnika").appendChild(newOption);
+    });
+    generirajPodatke(3, function(id){
+        id3 = id;
+        var newOption = document.createElement('option');
+        newOption.value = id3;
+        newOption.innerHTML = "Ian Vehar";
+        
+        document.getElementById("izberiBolnika").appendChild(newOption);
+    });
+    
+    
+}
+
 /**
  * Generator podatkov za novega pacienta, ki bo uporabljal aplikacijo. Pri
  * generiranju podatkov je potrebno najprej kreirati novega pacienta z
@@ -30,13 +63,157 @@ function getSessionId() {
  * @param stPacienta zaporedna številka pacienta (1, 2 ali 3)
  * @return ehrId generiranega pacienta
  */
-function generirajPodatke(stPacienta) {
-  ehrId = "";
+function generirajPodatke(stPacienta, callback) {
+  var ehrId = "";
+  
+  if(stPacienta == 1) {
+      kreirajEHRzaBolnika("Janez", "Novakovic", "MALE", "1989-10-25T14:58", function(id) {
+            console.log("id je:  " + id);
+            ehrId = id;
+            callback && callback(id);
+      });
+  } else if(stPacienta == 2) {
+      kreirajEHRzaBolnika("Brenda", "Petelin", "FEMALE", "1943-12-14T16:00", function(id) {
+            console.log("id je:  " + id);
+            ehrId = id;
+            callback && callback(id);
+      });
+  } else if(stPacienta == 3) {
+      kreirajEHRzaBolnika("Ian", "Vehar", "MALE", "2001-06-20T18:34", function(id) {
+            console.log("id je:  " + id);
+            ehrId = id;
+            callback && callback(id);
+      });
+  }
 
   // TODO: Potrebno implementirati
 
   return ehrId;
 }
 
+function kreirajEHRzaBolnika(ime, priimek, spol, datumRojstva, callback) {
+	sessionId = getSessionId();
+
+    var id = "";
+    
+	//var ime = $("#kreirajIme").val();
+//	var priimek = $("#kreirajPriimek").val();
+//	var datumRojstva = $("#kreirajDatumRojstva").val();
+
+	if (!ime || !priimek || !datumRojstva || ime.trim().length == 0 ||
+      priimek.trim().length == 0 || datumRojstva.trim().length == 0) {
+		//napacni podatki
+	} else {
+		$.ajaxSetup({
+		    headers: {"Ehr-Session": sessionId}
+		});
+		$.ajax({
+		    url: baseUrl + "/ehr",
+		    type: 'POST',
+		    success: function (data) {
+		        var ehrId = data.ehrId;
+		        var partyData = {
+		            firstNames: ime,
+		            lastNames: priimek,
+		            gender: spol,
+		            dateOfBirth: datumRojstva,
+		            partyAdditionalInfo: [{key: "ehrId", value: ehrId}]
+		        };
+		        $.ajax({
+		            url: baseUrl + "/demographics/party",
+		            type: 'POST',
+		            contentType: 'application/json',
+		            data: JSON.stringify(partyData),
+		            success: function (party) {
+		                if (party.action == 'CREATE') {
+    		                console.log(ehrId);
+		                    callback && callback(ehrId);
+		                }
+		            },
+		            error: function(err) {
+		            /*	$("#kreirajSporocilo").html("<span class='obvestilo label " +
+                    "label-danger fade-in'>Napaka '" +
+                    JSON.parse(err.responseText).userMessage + "'!");*/
+		            }
+		        });
+		    }
+		});
+	}
+	
+}
+
+function prikaziEHRodBolnika(ehrId, callback) {
+	sessionId = getSessionId();
+
+	//var ehrId = $("#preberiEHRid").val();
+
+	if (!ehrId || ehrId.trim().length == 0) {
+		$("#statusSporocilo").html("<span class='obvestilo label label-warning " +
+      "fade-in'>Neustrezen EHR ID!");
+	} else {
+		$.ajax({
+			url: baseUrl + "/demographics/ehr/" + ehrId + "/party",
+			type: 'GET',
+			headers: {"Ehr-Session": sessionId},
+	    	success: function (data) {
+				var party = data.party;
+				
+				$("#kreirajIme").html(party.firstNames);
+				$("#kreirajPriimek").html(party.lastNames);
+				$("#kreirajDatumRojstva").html(party.dateOfBirth);
+				$("#kreirajSpol").html(party.gender);
+				callback && callback();
+				
+				/* $("#preberiSporocilo").html("<span class='obvestilo label " +
+          "label-success fade-in'>Bolnik '" + party.firstNames + " " +
+          party.lastNames + "', ki se je rodil '" + party.dateOfBirth +
+          "'.</span>"); */
+			},
+			error: function(err) {
+				$("#statusSporocilo").html("<span class='obvestilo label " +
+          "label-danger fade-in'>Napaka '" +
+          JSON.parse(err.responseText).userMessage + "'!");
+			}
+		});
+	}
+}
 
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
+
+function displayAppBody() {
+    if(document.getElementById("izberiBolnika").value != "") {
+        var podatki = document.getElementById("izberiBolnika").value.split(";");
+        
+        document.querySelector("#app-body").style.display = 'block';
+    } else document.querySelector("#app-body").style.display = 'none';
+}
+
+
+function izberiPacienta() {
+    if(document.getElementById("izberiBolnika").value != "") {
+        var izbrani_id = document.getElementById("izberiBolnika").value;
+        
+        console.log("izbrani id je: " + izbrani_id);
+        
+        prikaziEHRodBolnika(izbrani_id, function() {
+            document.querySelector("#izbiraPacienta").style.display = 'none';
+            document.querySelector("#app-body").style.display = 'block';
+        });
+        
+    } else if (document.getElementById("id_input").value != "") {
+        var izbrani_id = document.getElementById("id_input").value;
+        console.log("izbrani id je: " + izbrani_id);
+        
+        prikaziEHRodBolnika(izbrani_id, function() {
+            document.querySelector("#izbiraPacienta").style.display = 'none';
+            document.querySelector("#app-body").style.display = 'block';
+        });
+        
+        
+    }
+}
+
+
+$(document).ready(function() {
+    
+});
