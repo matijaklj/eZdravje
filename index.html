@@ -10,9 +10,9 @@
   
   <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjbQ3MrKmcLppv4seRMH7q0bO08CgzJfo"></script>
   
-  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
+  <script src="//d3js.org/d3.v3.min.js"></script>
   <script src="knjiznice/js/bootstrap.min.js"></script>
   <script src="knjiznice/js/koda.js"></script>
 </head>
@@ -73,7 +73,7 @@
         </div>
       </div>
         
-      <div class="row" id="app-body" style="display: none; background-color: lightgray;">
+      <div class="row" id="app-body" style="visibility:hidden; background-color: lightgray;">
 				<div class="col-sm-3">
 				  <img src="icon-profile.png" alt="slika profila" class="img-rounded" width="200" height="200">
 				</div>
@@ -95,7 +95,7 @@
 				<div class="col-sm-12">
 				  <ul class="nav nav-pills nav-justified">
             <li class="active"><a data-toggle="pill" href="#home">Vitalni podatki pacienta</a></li>
-            <li><a data-toggle="pill" href="#menu1">Zemljevid</a></li>
+            <li><a data-toggle="pill" href="#menu1" onClick="google.maps.event.trigger(map, 'resize');">Zemljevid</a></li>
           </ul>
 				</div>
 				
@@ -146,8 +146,46 @@
               
   				  </div>
   				  
-  				  <div id="visualizacija" class="col-sm-6">
+  				  <div id="visualizacija_podatkov" class="col-sm-6">
   				    <h3>Vizualizacija podatkov</h3>
+  				    
+  				    <span class="label label-default">Izberi podatke za vizualizacijo</span>
+  				    
+  				    <select class="form-control" id="izberiPodatkeViz" onChange="InitChart()">
+                <option value="visina">Višina</option>
+                <option value="temp">Telesna temperatura</option>
+                
+                <option value="teza">Telesna teža</option>
+                
+                <option value="tlak">Krvni tlak</option>
+                <option value="spO2">Nasičenost krvi s kisikom</option>
+              </select>
+  				    
+  				    <br>
+  				    
+  				    <style>
+                      .axis path,
+                      .axis line {
+                        fill: none;
+                        stroke: #777;
+                        shape-rendering: crispEdges;
+                      }
+                      
+                      .axis text {
+                        font-family: 'Arial';
+                        font-size: 13px;
+                      }
+                      
+                      .tick {
+                        stroke-dasharray: 1, 2;
+                      }
+                      
+                      .bar {
+                        fill: FireBrick;
+                      }
+              </style>
+  				    
+  				    <svg id="visualisation" class="col-sm-12" width="500" height="250"></svg>
   				  </div>
   				  
   				</div>
@@ -164,14 +202,12 @@
     				    </div>
     				  </form>
     				  
-  				    <div id="map" class="col-sm-12" style="height: 400px"></div>
+  				    <div id="map" class="col-sm-12" style="height: 500px"></div>
   				    
   				  </div>
   				</div>
   				
-  			</div>	
-				<!--<div id="vitalniPodatki" class="col-sm-12" style="display: block"></div>
-				<div id="map" class="col-sm-12" style="display: none; height:400px"></div> -->
+  			</div>
 				
 			</div>  
       

@@ -1,0 +1,4 @@
+- visualizacija ( http://bl.ocks.org/mbostock/3883245 )
+
+
+ata smurf = b931580f-2b05-488b-985b-8d9ffb08ad02 
