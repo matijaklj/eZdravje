@@ -10,7 +10,7 @@
   
   <script async defer type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjbQ3MrKmcLppv4seRMH7q0bO08CgzJfo"></script>
   
-  
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
   <script src="//d3js.org/d3.v3.min.js"></script>
   <script src="knjiznice/js/bootstrap.min.js"></script>
@@ -94,13 +94,13 @@
 				
 				<div class="col-sm-12">
 				  <ul class="nav nav-pills nav-justified">
-            <li class="active"><a data-toggle="pill" href="#home">Vitalni podatki pacienta</a></li>
-            <li><a data-toggle="pill" href="#menu1" onClick="google.maps.event.trigger(map, 'resize');">Zemljevid</a></li>
+            <li class="active"><a data-toggle="pill" href="#vitalniPodatki">Vitalni podatki pacienta</a></li>
+            <li><a data-toggle="pill" href="#zemljevid" onClick="initMap();">Zemljevid</a></li>
           </ul>
 				</div>
 				
 				<div class="tab-content">
-  				<div id="home" class="tab-pane fade in active">
+  				<div id="vitalniPodatki" class="tab-pane fade in active">
   				  <div id="vitalniPodatki" class="col-sm-6">
   				    <br>
               
@@ -151,13 +151,14 @@
   				    
   				    <span class="label label-default">Izberi podatke za vizualizacijo</span>
   				    
-  				    <select class="form-control" id="izberiPodatkeViz" onChange="InitChart()">
+  				    <select class="form-control" id="izberiPodatkeViz"  onChange="InitChart(patientID)">
                 <option value="visina">Višina</option>
                 <option value="temp">Telesna temperatura</option>
                 
                 <option value="teza">Telesna teža</option>
                 
-                <option value="tlak">Krvni tlak</option>
+                <option value="tlak1">Sistolični krvni tlak</option>
+                <option value="tlak2">Diastolični krvni tlak</option>
                 <option value="spO2">Nasičenost krvi s kisikom</option>
               </select>
   				    
@@ -185,21 +186,23 @@
                       }
               </style>
   				    
-  				    <svg id="visualisation" class="col-sm-12" width="500" height="250"></svg>
+  				    <svg id="visualisation" class="col-sm-12" width="500" height="250"></svg> 
+  				    
   				  </div>
   				  
   				</div>
   				
-  				<div id="menu1" class="tab-pane fade">
+  				<div id="zemljevid" class="tab-pane fade">
   				  <div class="col-sm-12">
   				    <form class="form-inline " role="form">
-    				    <div class="form-group col-sm-12">
-    				      <p class="col-sm-4">Izberi zravstveno ustanovo: </p>
-        				  <select class="form-control col-sm-6" id="izberiZU">
+    				    <div class="form-group">
+    				      <label for="izberiZU">Izberi zravstveno ustanovo:</label>
+        				  <select class="form-control" id="izberiZU">
         				    <option value="Zdravstveni dom Nova Gorica, Nova Gorica">ZD Nova Gorica</option>
+        				    <option value="Cesta prekomorskih brigad 25, 5290 Šempeter pri Gorici">ZD Šempeter pri Gorici</option>
         				  </select>
-        				  <button type="button" class="btn btn-primary col-sm-3" id="directionBtn">Prikaži pot</button>
     				    </div>
+    				    <button type="button" class="btn btn-primary" id="directionBtn">Prikaži pot</button>
     				  </form>
     				  
   				    <div id="map" class="col-sm-12" style="height: 500px"></div>

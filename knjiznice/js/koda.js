@@ -5,10 +5,7 @@ var queryUrl = baseUrl + '/query';
 var username = "ois.seminar";
 var password = "ois4fri";
 
-var id1 = "";
-var id2 = "";
-var id3 = "";
-
+var patientID = "";
 
 /**
  * Prijava v sistem z privzetim uporabnikom za predmet OIS in pridobitev
@@ -28,25 +25,25 @@ function getSessionId() {
 
 function generirajVzorcnePaciente() {
     generirajPodatke(1, function(id){
-        id1 = id;
+        //id1 = id;
         var newOption = document.createElement('option');
-        newOption.value = id1;
+        newOption.value = id;
         newOption.innerHTML = "Janez Novakovic";
         
         document.getElementById("izberiBolnika").appendChild(newOption);
     });
     generirajPodatke(2, function(id){
-        id2 = id;
+        //id2 = id;
         var newOption = document.createElement('option');
-        newOption.value = id2;
+        newOption.value = id;
         newOption.innerHTML = "Brenda Petelin";
         
         document.getElementById("izberiBolnika").appendChild(newOption);
     });
     generirajPodatke(3, function(id){
-        id3 = id;
+        //id3 = id;
         var newOption = document.createElement('option');
-        newOption.value = id3;
+        newOption.value = id;
         newOption.innerHTML = "Ian Vehar";
         
         document.getElementById("izberiBolnika").appendChild(newOption);
@@ -55,29 +52,6 @@ function generirajVzorcnePaciente() {
     
 }
 
-var dates1 = ["2010-05-10T13:30", "2010-05-12T14:00","2010-05-13T11:30","2010-05-15T13:15", "2010-05-16T10:45", "2010-05-20T13:00", "2010-05-25T16:00", "2010-05-30T15:35"];
-var telesnaVisina1 = ["184", "184", "184", "184", "184", "184", "184", "184"];
-var telesnaTeza1 = ["89.00", "89.00", "89.00", "91.00", "91.50", "92.00", "93.00", "95.00"];
-var telesnaTemperatura1 = ["38.00", "38.50", "39.00", "38.00", "36.50", "36.00", "36.00", "36.00"];
-var sistolicniKrvniTlak1 = ["119",  "114",  "115",  "128",  "121",  "127",  "110", "100"];
-var diastolicniKrvniTlak1 = ["88",   "82",  "75",  "79",  "66",   "65",   "79",  "76"];
-var nasicenostKrviSKisikom1 = ["95.00", "96.00", "95.00", "96.00", "95.00", "99.00", "99.50", "98.50"];
-
-var dates2 = ["2010-02-10T13:30", "2010-02-12T14:00","2010-02-13T11:30","2010-02-15T13:15", "2010-02-16T10:45", "2010-02-20T13:00", "2010-02-23T16:00", "2010-02-25T15:35"];
-var telesnaVisina2 = ["164", "164", "164", "164", "164", "164", "164", "164"];
-var telesnaTeza2 = ["58.00", "58.00", "56.00", "55.00", "54.00", "54.00", "53.00", "54.00"];
-var telesnaTemperatura2 = ["36.50", "36.50", "38.00", "38.50", "38.50", "37.50", "38.00", "36.00"];
-var sistolicniKrvniTlak2 = ["119",  "120",  "128",  "128",  "121",  "127",  "110", "120"];
-var diastolicniKrvniTlak2 = ["88",   "82",  "75",  "85",  "66",   "78",   "79",  "80"];
-var nasicenostKrviSKisikom2 = ["89.00", "88.00", "82.00", "74.00", "77.00", "79.00", "80.50", "80.50"];
-
-var dates3 = ["2015-04-20T13:30", "2015-04-25T14:00","2015-05-03T11:30","2015-05-07T13:15", "2015-05-09T10:45", "2015-05-13T13:00", "2015-05-15T16:00", "2015-05-16T15:35"];
-var telesnaVisina3 = ["166", "166", "167", "167", "168", "168", "169", "170"];
-var telesnaTeza3 = ["55.00", "55.00", "56.00", "55.00", "56.00", "56.00", "56.00", "57.00"];
-var telesnaTemperatura3 = ["36.50", "37.50", "38.00", "38.50", "39.50", "40.50", "38.00", "37.00"];
-var sistolicniKrvniTlak3 = ["110",  "114",  "115",  "121",  "123",  "127",  "107", "110"];
-var diastolicniKrvniTlak3 = ["88",   "82",  "75",  "79",  "70",   "65",   "70",  "72"];
-var nasicenostKrviSKisikom3 = ["98.00", "99.00", "96.00", "96.50", "97.00", "98.50", "99.50", "99.00"];
 
 /**
  * Generator podatkov za novega pacienta, ki bo uporabljal aplikacijo. Pri
@@ -94,21 +68,58 @@ function generirajPodatke(stPacienta, callback) {
       kreirajEHRzaBolnika("Janez", "Novakovic", "MALE", "1989-10-25T14:58", "Snežatno 2, 5211 Kojsko", function(id) {
             console.log("id je:  " + id);
             ehrId = id;
-            dodajVItalneZnake(ehrId, dates1, telesnaVisina1, telesnaTeza1, telesnaTemperatura1, sistolicniKrvniTlak1, diastolicniKrvniTlak1, nasicenostKrviSKisikom1);
+            
+            var dates1 = ["2010-05-10T13:30", "2010-05-12T14:00","2010-05-13T11:30","2010-05-15T13:15", "2010-05-16T10:45", "2010-05-20T13:00", "2010-05-25T16:00", "2010-05-30T15:35"];
+            var telesnaVisina1 = ["184", "184", "184", "184", "184", "184", "184", "184"];
+            var telesnaTeza1 = ["89.00", "89.00", "89.00", "91.00", "91.50", "92.00", "93.00", "95.00"];
+            var telesnaTemperatura1 = ["38.00", "38.50", "39.00", "38.00", "36.50", "36.00", "36.00", "36.00"];
+            var sistolicniKrvniTlak1 = ["119",  "114",  "115",  "128",  "121",  "127",  "110", "100"];
+            var diastolicniKrvniTlak1 = ["88",   "82",  "75",  "79",  "66",   "65",   "79",  "76"];
+            var nasicenostKrviSKisikom1 = ["95.00", "96.00", "95.00", "96.00", "95.00", "99.00", "99.50", "98.50"];
+            
+            for(var i = 0; i < 8; i++) {
+                dodajVItalneZnake(ehrId, dates1[i], telesnaVisina1[i], telesnaTeza1[i], telesnaTemperatura1[i], sistolicniKrvniTlak1[i], diastolicniKrvniTlak1[i], nasicenostKrviSKisikom1[i],
+                function(){});
+            }
+            
             callback && callback(id);
       });
   } else if(stPacienta == 2) {
       kreirajEHRzaBolnika("Brenda", "Petelin", "FEMALE", "1943-12-14T16:00", "Stara Gora 18a, 5000 Nova Gorica", function(id) {
             console.log("id je:  " + id);
             ehrId = id;
-            dodajVItalneZnake(ehrId, dates2, telesnaVisina2, telesnaTeza2, telesnaTemperatura2, sistolicniKrvniTlak2, diastolicniKrvniTlak2, nasicenostKrviSKisikom2);
+            
+            var dates2 = ["2010-02-10T13:30", "2010-02-12T14:00","2010-02-13T11:30","2010-02-15T13:15", "2010-02-16T10:45", "2010-02-20T13:00", "2010-02-23T16:00", "2010-02-25T15:35"];
+            var telesnaVisina2 = ["164", "164", "164", "164", "164", "164", "164", "164"];
+            var telesnaTeza2 = ["58.00", "58.00", "56.00", "55.00", "54.00", "54.00", "53.00", "54.00"];
+            var telesnaTemperatura2 = ["36.50", "36.50", "38.00", "38.50", "38.50", "37.50", "38.00", "36.00"];
+            var sistolicniKrvniTlak2 = ["119",  "120",  "128",  "128",  "121",  "127",  "110", "120"];
+            var diastolicniKrvniTlak2 = ["88",   "82",  "75",  "85",  "66",   "78",   "79",  "80"];
+            var nasicenostKrviSKisikom2 = ["89.00", "88.00", "82.00", "74.00", "77.00", "79.00", "80.50", "80.50"];
+            
+            for(var i = 0; i < 8; i++) {
+                dodajVItalneZnake(ehrId, dates2[i], telesnaVisina2[i], telesnaTeza2[i], telesnaTemperatura2[i], sistolicniKrvniTlak2[i], diastolicniKrvniTlak2[i], nasicenostKrviSKisikom2[i],
+                function(){});
+            }
             callback && callback(id);
       });
   } else if(stPacienta == 3) {
       kreirajEHRzaBolnika("Ian", "Vehar", "MALE", "2001-06-20T18:34", "Ulica bratov Hvalič 64, 5000 Nova Gorica", function(id) {
             console.log("id je:  " + id);
             ehrId = id;
-            dodajVItalneZnake(ehrId, dates3, telesnaVisina3, telesnaTeza3, telesnaTemperatura3, sistolicniKrvniTlak3, diastolicniKrvniTlak3, nasicenostKrviSKisikom3);
+            
+            var dates3 = ["2015-04-20T13:30", "2015-04-25T14:00","2015-05-03T11:30","2015-05-07T13:15", "2015-05-09T10:45", "2015-05-13T13:00", "2015-05-15T16:00", "2015-05-16T15:35"];
+            var telesnaVisina3 = ["166", "166", "167", "167", "168", "168", "169", "170"];
+            var telesnaTeza3 = ["55.00", "55.00", "56.00", "55.00", "56.00", "56.00", "56.00", "57.00"];
+            var telesnaTemperatura3 = ["36.50", "37.50", "38.00", "38.50", "39.50", "40.50", "38.00", "37.00"];
+            var sistolicniKrvniTlak3 = ["110",  "114",  "115",  "121",  "123",  "127",  "107", "110"];
+            var diastolicniKrvniTlak3 = ["88",   "82",  "75",  "79",  "70",   "65",   "70",  "72"];
+            var nasicenostKrviSKisikom3 = ["98.00", "99.00", "96.00", "96.50", "97.00", "98.50", "99.50", "99.00"];
+            
+            for(var i = 0; i < 8; i++) {
+                dodajVItalneZnake(ehrId, dates3[i], telesnaVisina3[i], telesnaTeza3[i], telesnaTemperatura3[i], sistolicniKrvniTlak3[i], diastolicniKrvniTlak3[i], nasicenostKrviSKisikom3[i],
+                function(){});
+            }
             callback && callback(id);
       });
   }
@@ -171,7 +182,7 @@ function kreirajEHRzaBolnika(ime, priimek, spol, datumRojstva, naslov, callback)
 }
 // ----------------- dodaj vitalne znake bolnika
 
-function dodajVItalneZnake(ehrId, datumInUra, telesnaVisina, telesnaTeza, telesnaTemperatura, sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom) {
+function dodajVItalneZnake(ehrId, datumInUra, telesnaVisina, telesnaTeza, telesnaTemperatura, sistolicniKrvniTlak, diastolicniKrvniTlak, nasicenostKrviSKisikom, callback) {
 	sessionId = getSessionId();
 
 	
@@ -180,8 +191,7 @@ function dodajVItalneZnake(ehrId, datumInUra, telesnaVisina, telesnaTeza, telesn
 	if (!ehrId || ehrId.trim().length == 0) {
 		//napacen ehrId
 	} else {
-		for(var i = 0; i < 8; i++) {
-    		console.log("dela");
+    		//console.log("dela");
     		$.ajaxSetup({
     		    headers: {"Ehr-Session": sessionId}
     		});
@@ -190,14 +200,14 @@ function dodajVItalneZnake(ehrId, datumInUra, telesnaVisina, telesnaTeza, telesn
                 // https://rest.ehrscape.com/rest/v1/template/Vital%20Signs/example
     		    "ctx/language": "en",
     		    "ctx/territory": "SI",
-    		    "ctx/time": datumInUra[i],
-    		    "vital_signs/height_length/any_event/body_height_length": telesnaVisina[i],
-    		    "vital_signs/body_weight/any_event/body_weight": telesnaTeza[i],
-    		   	"vital_signs/body_temperature/any_event/temperature|magnitude": telesnaTemperatura[i],
+    		    "ctx/time": datumInUra,
+    		    "vital_signs/height_length/any_event/body_height_length": telesnaVisina,
+    		    "vital_signs/body_weight/any_event/body_weight": telesnaTeza,
+    		   	"vital_signs/body_temperature/any_event/temperature|magnitude": telesnaTemperatura,
     		    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
-    		    "vital_signs/blood_pressure/any_event/systolic": sistolicniKrvniTlak[i],
-    		    "vital_signs/blood_pressure/any_event/diastolic": diastolicniKrvniTlak[i],
-    		    "vital_signs/indirect_oximetry:0/spo2|numerator": nasicenostKrviSKisikom[i]
+    		    "vital_signs/blood_pressure/any_event/systolic": sistolicniKrvniTlak,
+    		    "vital_signs/blood_pressure/any_event/diastolic": diastolicniKrvniTlak,
+    		    "vital_signs/indirect_oximetry:0/spo2|numerator": nasicenostKrviSKisikom
     		};
     		var parametriZahteve = {
     		    ehrId: ehrId,
@@ -212,12 +222,12 @@ function dodajVItalneZnake(ehrId, datumInUra, telesnaVisina, telesnaTeza, telesn
     		    data: JSON.stringify(podatki),
     		    success: function (res) {
     		        //uspesno dodajanje podatkov
+    		        callback && callback();
     		    },
     		    error: function(err) {
     		    	// prislo je do napake
     		    }
     		});
-		}
 	}
 }
 
@@ -362,28 +372,22 @@ function displayAppBody() {
 */
 
 function izberiPacienta() {
+    var izbrani_id = null;
+    
     if(document.getElementById("izberiBolnika").value != "") {
-        var izbrani_id = document.getElementById("izberiBolnika").value;
-        
+        izbrani_id = document.getElementById("izberiBolnika").value;
         console.log("izbrani id je: " + izbrani_id);
-        
-        prikaziEHRodBolnika(izbrani_id, function() {
-            initMap();
-            InitChart(izbrani_id);
-            
-            document.getElementById('izberiPodatkeViz').addEventListener('change', InitChart(izbrani_id));
-            
-            prikaziVitalnePodatke(izbrani_id);
-            document.querySelector("#izbiraPacienta").style.display = 'none';
-            document.querySelector("#app-body").style.visibility = 'visible';
-        });
+        patientID = izbrani_id;
         
     } else if (document.getElementById("id_input").value != "") {
-        var izbrani_id = document.getElementById("id_input").value;
+        izbrani_id = document.getElementById("id_input").value;
         console.log("izbrani id je: " + izbrani_id);
-        
+        patientID = izbrani_id;
+    }
+    
+    if(izbrani_id != null) {
         prikaziEHRodBolnika(izbrani_id, function() {
-            initMap();
+
             InitChart(izbrani_id);
             
             document.getElementById('izberiPodatkeViz').addEventListener('change', InitChart(izbrani_id));
@@ -392,8 +396,6 @@ function izberiPacienta() {
             document.querySelector("#izbiraPacienta").style.display = 'none';
             document.querySelector("#app-body").style.visibility = 'visible';
         });
-        
-        
     }
 }
 
@@ -414,6 +416,7 @@ function initMap() {
         });
         
         directionsDisplay.setMap(map);
+        google.maps.event.trigger(map, "resize");
 
         var onChangeHandler = function() {
           calculateAndDisplayRoute(directionsService, directionsDisplay);
@@ -441,8 +444,11 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
 
 // uporaba Google Maps
 
+
 //-----------------------------------------------------------------------
 // d3 vizualizacija podatkov
+
+
 
 function getDataForChart(ehrId, callback){
     sessionId = getSessionId();
@@ -456,8 +462,8 @@ function getDataForChart(ehrId, callback){
                 var i, len = res.length;
                 for(i = 0; i < len; i++) {
                     var datum = new Date(res[i].time);
-                    res[i]['date'] = datum;
-                    res[i]['data'] = res[i]['temperature'];
+                    res[len -1 -i]['date'] = datum;
+                    res[len -1 -i]['data'] = res[i]['temperature'];
                     delete res[i]['temperature'];
                     delete res[i]['time'];
                 }
@@ -479,8 +485,8 @@ function getDataForChart(ehrId, callback){
                 var i, len = res.length;
                 for(i = 0; i < len; i++) {
                     var datum = new Date(res[i].time);
-                    res[i]['date'] = datum;
-                    res[i]['data'] = res[i]['height'];
+                    res[len -1 -i]['date'] = datum;
+                    res[len -1 -i]['data'] = res[i]['height'];
                     delete res[i]['height'];
                     delete res[i]['time'];
                 }
@@ -492,29 +498,95 @@ function getDataForChart(ehrId, callback){
                 console.log("error!!!!!!!!");
             }
         });
-    } /*else {
-        var lineData = [{
-            'date': 1,
-            'data': 5
-          }, {
-            'date': 20,
-            'data': 20
-          }, {
-            'date': 40,
-            'data': 10
-          }, {
-            'date': 60,
-            'data': 40
-          }, {
-            'date': 80,
-            'data': 5
-          }, {
-            'date': 100,
-            'data': 60
-          }];
-          
-          callback && callback(lineData);
-    }*/
+    } else if (document.getElementById("izberiPodatkeViz").value == "teza") {
+        $.ajax({
+            url: baseUrl + "/view/" + ehrId + "/weight",
+            type: 'GET',
+            headers: { "Ehr-Session": sessionId },
+            success: function (res) {
+                var i, len = res.length;
+                for(i = 0; i < len; i++) {
+                    var datum = new Date(res[i].time);
+                    res[len -1 -i]['date'] = datum;
+                    res[len -1 -i]['data'] = res[i]['weight'];
+                    delete res[i]['weight'];
+                    delete res[i]['time'];
+                }
+                console.log(res);
+                
+                callback && callback(res);
+            },
+            error: function(err) {
+                console.log("error!!!!!!!!");
+            }
+        });
+    } else if (document.getElementById("izberiPodatkeViz").value == "tlak1") {
+        $.ajax({
+            url: baseUrl + "/view/" + ehrId + "/blood_pressure",
+            type: 'GET',
+            headers: { "Ehr-Session": sessionId },
+            success: function (res) {
+                var i, len = res.length;
+                for(i = 0; i < len; i++) {
+                    var datum = new Date(res[i].time);
+                    res[len -1 -i]['date'] = datum;
+                    res[len -1 -i]['data'] = res[i]['systolic'];
+                    delete res[i]['systolic'];
+                    delete res[i]['time'];
+                }
+                console.log(res);
+                
+                callback && callback(res);
+            },
+            error: function(err) {
+                console.log("error!!!!!!!!");
+            }
+        });
+    } else if (document.getElementById("izberiPodatkeViz").value == "tlak2") {
+        $.ajax({
+            url: baseUrl + "/view/" + ehrId + "/blood_pressure",
+            type: 'GET',
+            headers: { "Ehr-Session": sessionId },
+            success: function (res) {
+                var i, len = res.length;
+                for(i = 0; i < len; i++) {
+                    var datum = new Date(res[i].time);
+                    res[len -1 -i]['date'] = datum;
+                    res[len -1 -i]['data'] = res[i]['diastolic'];
+                    delete res[i]['diastolic'];
+                    delete res[i]['time'];
+                }
+                console.log(res);
+                
+                callback && callback(res);
+            },
+            error: function(err) {
+                console.log("error!!!!!!!!");
+            }
+        });
+    } else if (document.getElementById("izberiPodatkeViz").value == "spO2") {
+        $.ajax({
+            url: baseUrl + "/view/" + ehrId + "/spO2",
+            type: 'GET',
+            headers: { "Ehr-Session": sessionId },
+            success: function (res) {
+                var i, len = res.length;
+                for(i = 0; i < len; i++) {
+                    var datum = new Date(res[i].time);
+                    res[len -1 -i]['date'] = datum;
+                    res[len -1 -i]['data'] = res[i]['spO2'];
+                    delete res[i]['spO2'];
+                    delete res[i]['time'];
+                }
+                console.log(res);
+                
+                callback && callback(res);
+            },
+            error: function(err) {
+                console.log("error!!!!!!!!");
+            }
+        });
+    }
     
     
 }
@@ -545,26 +617,33 @@ function doChart(lineData) {
       bottom: 20,
       left: 50
     },
-    xRange = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(lineData, function (d) {
-        return d.date;
+    xRange = d3.time.scale()
+        .domain([new Date(lineData[0].date), d3.time.day.offset(new Date(lineData[lineData.length - 1].date), 1)])
+        .range([MARGINS.left, WIDTH - MARGINS.right]);
+    
+    /*.range([MARGINS.left, WIDTH - MARGINS.right]).domain([d3.min(lineData, function (d) {
+        return new Date(d.date);
       }),
       d3.max(lineData, function (d) {
         return d.date;
       })
-    ]),
+    ]), */
 
     yRange = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(lineData, function (d) {
-        return d.data;
+        return d.data -3;
       }),
       d3.max(lineData, function (d) {
-        return d.data;
+        return d.data +3;
       })
     ]),
+    
 
     xAxis = d3.svg.axis()
       .scale(xRange)
-      .tickSize(5)
-      .tickSubdivide(true),
+      .ticks(5)
+      .tickFormat(d3.time.format('%a %d'))
+      .tickSize(0)
+      .tickPadding(8);
 
     yAxis = d3.svg.axis()
       .scale(yRange)
@@ -587,8 +666,8 @@ function doChart(lineData) {
       .attr("transform", "rotate(-90)")
       .attr("data", 6)
       .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Temperatura");
+      .style("text-anchor", "end");
+      //.text("Temperatura");
 
   var lineFunc = d3.svg.line()
   .x(function (d) {
@@ -608,4 +687,3 @@ vis.append("svg:path")
 }
 
 // konec vizualizacije
-
